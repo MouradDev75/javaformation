@@ -1,5 +1,6 @@
 package fr.dawan.genericite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class app {
             // fichier ou table de logs
         }
 
-        System.out.println(">>> suite de l'appication.......");
+        System.out.println(">>> suite de l'application.......");
 
         List<Produit> prods = new ArrayList<>();
         prods.add(new Produit(1, "PC Dell"));
@@ -38,6 +39,22 @@ public class app {
         SerialTool.exportBin(prods, "produits.bin");
 
         for(Produit p : SerialTool.importBin("produits.bin")){
+            System.out.println(p);
+        }
+
+        List<User> users = new ArrayList<>();
+        users.add(new User(1, "Dawan"));
+        users.add(new User(2, "Jehann"));
+
+        SerialToolGeneric.exportBinGeneric(users, "users.bin");
+        for(Serializable u : SerialToolGeneric.importBinGeneric("users.bin")){
+            System.out.println(u);
+        }
+
+        System.out.println(">>>> Sérialisation CSV:");
+        SerialTool.exportCsv(prods, "produits.csv",",");
+
+        for(Produit p : SerialTool.importCsv("produits.csv", ",")){
             System.out.println(p);
         }
     }

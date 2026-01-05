@@ -1,69 +1,12 @@
 package fr.dawan.genericite;
 
-/*
-Sérialisation: mécanisme permettant de sauvegarder l'état d'un objet dans un support physique de persistance
-3 types de sérialisation:
-binaire
-xml
-json
-Java propose 2 types de flux pour manipuler les fichiers:
-flux binaires: lecture/écriture char/char: FileInputStream - FileOutputStream
-flux caractères: lecture/écritue ligne/ligne: FileReader - FileWriter
-
-Obligation: une ressource doit être libérée à la fin de son utilisation (fermeture du flux)
- */
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SerialTool {
+public class SerialToolGeneric {
 
-    public static void copy(String src, String cible){
-        try{
-
-            FileInputStream fis = new FileInputStream(src);
-            FileOutputStream fos = new FileOutputStream(cible);
-
-            int tmp = fis.read();
-            while (tmp != -1){
-                fos.write(tmp);
-                tmp = fis.read();
-            }
-
-            fis.close();
-            fos.close();
-
-        }catch (Exception e){
-
-        }
-    }
-
-    public static void copy2(String src, String cible){
-        try{
-
-            FileReader fr = new FileReader(src);
-            FileWriter fw = new FileWriter(cible);
-
-            //bonne pratique: prévoir un buffer pour les léctire/écriture
-            BufferedReader br = new BufferedReader(fr, 16384);
-            BufferedWriter bw = new BufferedWriter(fw, 16384);
-
-            String ligne = br.readLine();
-            while(ligne != null){
-                bw.write(ligne);
-                ligne = br.readLine();
-            }
-
-            br.close();
-            bw.close();
-
-        }catch (Exception e){
-
-        }
-    }
-
-    public static void exportBin(List<Produit> lst, String chemin){
+    public static <T extends Serializable> void exportBinGeneric(List<T> lst, String chemin){
         try{
             FileOutputStream fos = new FileOutputStream(chemin);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -75,13 +18,13 @@ public class SerialTool {
         }
     }
 
-    public static List<Produit> importBin(String chemin){
-        List<Produit> lst = new ArrayList<>();
+    public static <T extends Serializable> List<T> importBinGeneric(String chemin){
+        List<T> lst = new ArrayList<>();
         try {
 
             FileInputStream fis = new FileInputStream(chemin);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            lst = (List<Produit>) ois.readObject();
+            lst = (List<T>) ois.readObject();
 
             ois.close();
 
@@ -94,7 +37,6 @@ public class SerialTool {
         return lst;
     }
 
-    //Sérialisation CSV
     public static void exportCsv(List<Produit> lst, String chemin, String separateur){
 
         /*
@@ -106,7 +48,7 @@ public class SerialTool {
             FileWriter fw = new FileWriter(chemin);
             BufferedWriter bw = new BufferedWriter(fw);
 
-           //convertir chaque prouit en ligne -> insérer la ligne dans le fichier
+            //convertir chaque prouit en ligne -> insérer la ligne dans le fichier
             for(Produit p : lst){
                 String ligne = p.getId()+separateur+p.getName()+"\n";
                 bw.write(ligne);
