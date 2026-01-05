@@ -38,18 +38,14 @@ public class SerialToolGeneric {
         return lst;
     }
 
-    public static <T extends Serializable> void exportCsv(List<T> lst, String chemin, String separateur){
+    public static <T extends Serializable> void exportCsvGeneric(List<T> lst, String chemin, String separateur){
 
-        /*
-        1,PC DELL
-        2,Ecran HP
-         */
         try{
 
             FileWriter fw = new FileWriter(chemin);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            //convertir chaque prouit en ligne -> insérer la ligne dans le fichier
+            //convertir chaque produit en ligne -> insérer la ligne dans le fichier
             for(T obj : lst){
                 Class<?> clazz = obj.getClass();
                 Field[] fields = clazz.getDeclaredFields();
@@ -75,24 +71,53 @@ public class SerialToolGeneric {
     }
 
     //désérialisation CSV
-    public static List<Produit> importCsv(String chemin, String separateur){
+    public static <T extends Serializable> List<T> importCsvGeneric(String chemin, String separateur, Class<T> clazz){
         /*
-        Lecture igne par ligne
-        Convertir chaque ligne en produit
-        insérer le produit dans la liste
+        Lecture ligne par ligne
+        Convertir chaque ligne en objet de type T
+        insérer l'objet T dans la liste
          */
 
-        List<Produit> lst = new ArrayList<>();
+        List<T> lst = new ArrayList<>();
         try{
 
             FileReader fr = new FileReader(chemin);
             BufferedReader br = new BufferedReader(fr);
             String ligne = br.readLine();
             while(ligne != null){
-                //1,PC Dell
-                String[] tab = ligne.split(separateur);
-                Produit p = new Produit(Integer.parseInt(tab[0]), tab[1]);
-                lst.add(p);
+
+                String[] tab = ligne.split(separateur); // tab: contient les valeurs des attributs de l'objet
+
+                //["1", "PC Dell"]
+
+                //récupérer les attributs de l'objet T
+                T obj = clazz.getDeclaredConstructor().newInstance();
+                Field[] fields = clazz.getDeclaredFields();
+
+                int i = 0;
+
+                for(Field f : fields){
+                    f.setAccessible(true); //activer les get/set
+
+                    Class<?> type = f.getType();
+                    if(type.equals(Integer.class)){
+                       f.set(obj, Integer.parseInt(tab[i]));
+                    }else if(type.equals(int.class)){
+                        f.set(obj, Integer.parseInt(tab[i]));
+                    }else if(type.equals(String.class)){
+                        f.set(obj, tab[i]);
+                    }else if(type.equals(Double.class)){
+                        f.set(obj, Double.parseDouble(tab[i]));
+                    }else if(type.equals(double.class)){
+                        f.set(obj, Double.parseDouble(tab[i]));
+                    }else if(type.equals(Boolean.class)){
+                        f.set(obj, Boolean.parseBoolean(tab[i]));
+                    }
+
+                    i++;
+                }
+
+                lst.add(obj);
                 ligne = br.readLine();
             }
 
