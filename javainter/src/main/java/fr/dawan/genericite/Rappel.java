@@ -21,5 +21,26 @@ public class Rappel {
             //thorw: mot clé permattant de declancher une exception
             throw new Exception("Attention, division par 0");
         }
+
+
+    }
+
+    public static void main(String[] args) {
+        /*
+        Le type String par définition est immuable
+         */
+        String s = "test";
+        s.toUpperCase();
+        s.toLowerCase();
+
+        System.out.println(s);
+
+        //StringBuilder est muable
+        StringBuilder sb = new StringBuilder();
+        sb.append("t");
+        sb.append("es");
+        sb.append("t");
+
+        System.out.println(sb.toString());
     }
 }

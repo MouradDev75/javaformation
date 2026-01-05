@@ -1,6 +1,7 @@
 package fr.dawan.genericite;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class SerialToolGeneric {
         return lst;
     }
 
-    public static void exportCsv(List<Produit> lst, String chemin, String separateur){
+    public static <T extends Serializable> void exportCsv(List<T> lst, String chemin, String separateur){
 
         /*
         1,PC DELL
@@ -49,8 +50,19 @@ public class SerialToolGeneric {
             BufferedWriter bw = new BufferedWriter(fw);
 
             //convertir chaque prouit en ligne -> insérer la ligne dans le fichier
-            for(Produit p : lst){
-                String ligne = p.getId()+separateur+p.getName()+"\n";
+            for(T obj : lst){
+                Class<?> clazz = obj.getClass();
+                Field[] fields = clazz.getDeclaredFields();
+
+                StringBuilder sb = new StringBuilder();
+                for(Field f : fields){
+                    //construire la ligne à insérer dans le fichier csv
+                    f.setAccessible(true); //les attributs sont private dans une classe
+                    sb.append(f.get(obj).toString()).append(separateur);
+                    //1,PC Dell,
+                }
+                //suppression du dernier séparateur
+                String ligne = sb.substring(0, sb.length() - 1)+"\n";
                 bw.write(ligne);
 
             }
