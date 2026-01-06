@@ -15,6 +15,8 @@ public class app {
         - moins de cast -> moins de risques d'erreurs à l'exécution
          */
 
+        Produit pr = new Produit(); //rôle du construteur est d'initialiser les attributs de l'objet id = 0 - name = null
+
         Calculate<String> c1 = new Calculate<>();
         c1.a = "a";
         c1.b = "b";

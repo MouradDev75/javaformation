@@ -35,13 +35,47 @@ public class app {
 
         //Stream à partir d'une collection: list, set, map.....
         Collection<String> collection = Arrays.asList("a1", "a2","a3");
-        Stream<String> streamFromcollection = collection.stream();
+        Stream<String> streamFromCollection = collection.stream();
 
         testFilterAndCount();
         testMap();
         testSkipAndLimit();
         testDistinct();
         testSorted();
+        testReduce();
+        testReduceParallel();
+        testStreamParallel();
+        /*
+        Stream Parallel: permet d'appliquer un traitement commun à un ensemble d'objets
+         */
+    }
+
+    private static void testStreamParallel() {
+        System.out.println(">>>> test Stream Parallel:");
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+        numbers.parallelStream().forEach(n -> System.out.println(n+" "+Thread.currentThread().getName()));
+
+    }
+
+    private static void testReduceParallel() {
+        System.out.println(">>>>> Test reduce parallel:");
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+        int r = numbers.stream().parallel().reduce(-5, Integer::sum);
+        /*
+        -5 est appliqué à chauque nombre da la liste
+         */
+        System.out.println("résultat = "+r);
+    }
+
+    private static void testReduce() {
+        System.out.println(">>>>> Test reduce:");
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+        int r = numbers.stream()
+                .reduce(-5, Integer::sum);
+        /*
+        -5 est appliqué à la somme des éléments de la liste
+         */
+        System.out.println("résultat = "+r);
     }
 
     private static void testSorted() {
@@ -107,9 +141,6 @@ public class app {
                 .skip(2)
                 .limit(2)
                 .forEach(e -> System.out.println(e));
-
-
-
     }
 
     private static void testMap() {
