@@ -4,4 +4,7 @@
 4- Interfaces fonctionnelles (java functional)
 5- Api Stream: séquentiel et parellel
 6- Thread - Multi Threading - Thread Pool
-7- Rappels des concepts objets: Encapsulation
+7- Rappels des concepts objets:
+    - Encapsulation
+    - Gestion des dépendances: héritage - composition - association - relation
+    - Polymorphisme

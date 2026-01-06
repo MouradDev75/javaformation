@@ -7,6 +7,7 @@ public class Produit implements Serializable {
     private int id;
     private String name;
 
+
     public int getId() {
         return id;
     }
