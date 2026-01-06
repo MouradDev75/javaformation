@@ -10,3 +10,5 @@
     - Polymorphisme
 8- Bonnes pratiques:
     - SOLID
+    - Tell dont ask
+    - Loi Demeter
