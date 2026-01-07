@@ -1,0 +1,34 @@
+Le cas de gestion d'un panier d'achat d'un site e-commerce qui permet d'ajouter un produit dans un panier
+et de récupérer le contenu du panier.
+
+Règles métier:
+- la quantité pour chaque produit ajouté dans le panier est recalcuée en fonction de la disponibilité dans le stock
+- une remise de 10% est appliquée si le montant du panier dépasse 100€.
+
+Les informations liées aux produits sont fournies par un système distant
+La quantité disponible en stock pour chaque produit est fournie par un autre système distant
+
+****************************
+
+Dans approche classique basée sur les données (en couches), on va définir le model objet, ensuite:
+- ajouter la couche persistence (repository), ajouter la couche service, la couche IHM
+
+***************************
+
+Dans une architecture basée sur le métier, un des principes les plus important, c'est le domaine métier qui au centre de cette approche
+Le domaine ne doit pas avoir de dépendances techniques (type framework)
+Un deuxième principe de l'approche hexagonale: les dépendances doivent se faire de l'exterieur de l'hexagone vers l'intérieur
+
+Un hexagone possède 2 parties:
+- Partie gauche (API): c'est le point d'entrée de l'application (IHM)
+- Partie droite (SPI: Service Provider Interface): permet au domaine de récupérer ou d'envoyer des données
+
+---- Une architecture hexagonale ne convient pas à tous les projets. Si le domaine métier de l'application est riche
+(complèxes, sensible) ce type d'approche peut s'appliquer at aider à mieux comprendre le domaine métie
+
+Avantages:
+- applications faciles à tester
+- le domaine métier est complétement indépendant des technos (frameworks): on al apossibilité de switcher de technoloqies
+ou de faire cohabiter plusieurs technos au mm temps
+- facilité d'intéger de nouveaux dév. dans le projet
+- code facile à lire, facile à maintenir et facile à étendre

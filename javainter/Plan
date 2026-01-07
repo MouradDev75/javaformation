@@ -12,4 +12,7 @@
     - SOLID
     - Tell dont ask
     - Loi Demeter
-9- Couches d'une application
+9- Couches d'une application: entities - dto - repositories - services - IHM
+    - DDD: Data Driven Design: développement guidé par es données
+10- Architecture Hexagonale:
+    - DDD: Domain Driven Design: développement guidé par le métier
