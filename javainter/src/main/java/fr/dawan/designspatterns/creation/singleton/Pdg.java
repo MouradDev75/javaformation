@@ -1,4 +1,4 @@
-package fr.dawan.designspatterns.creation;
+package fr.dawan.designspatterns.creation.singleton;
 
 public class Pdg {
 

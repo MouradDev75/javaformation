@@ -1,14 +1,20 @@
 package fr.dawan.designspatterns;
 
-import fr.dawan.designspatterns.creation.LoggingSingleton;
-import fr.dawan.designspatterns.creation.Pdg;
-import fr.dawan.designspatterns.creation.ProductLombok;
-import fr.dawan.designspatterns.creation.User;
+import fr.dawan.designspatterns.creation.factory.ComputerFactory;
+import fr.dawan.designspatterns.creation.factory.Laptop;
+import fr.dawan.designspatterns.creation.factory.Phone;
+import fr.dawan.designspatterns.creation.factory.SmartTv;
+import fr.dawan.designspatterns.creation.prototype.Question;
+import fr.dawan.designspatterns.creation.prototype.Reponse;
+import fr.dawan.designspatterns.creation.singleton.LoggingSingleton;
+import fr.dawan.designspatterns.creation.singleton.Pdg;
+import fr.dawan.designspatterns.creation.builder.ProductLombok;
+import fr.dawan.designspatterns.creation.builder.User;
 
 public class app {
     static Pdg pdg3 = null, pdg4 = null;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
         /*
         Besoins de la conception objets:
         - Encapsuler des données sans en empêcher l'accès
@@ -97,5 +103,68 @@ public class app {
                 .name("PC Dell")
                 .build();
         System.out.println(p1);
+
+        System.out.println("____ Factory:");
+        /*
+        A utiliser avec objets liés (classe mère + classes filles)
+        Factory (une fabrique): classe qui va gérer le process de création d'objet.
+         */
+        ComputerFactory factory = new ComputerFactory();
+        Laptop laptop = (Laptop) factory.getComputer(Laptop.class);
+        Phone phone = (Phone) factory.getComputer(Phone.class);
+        SmartTv smart = (SmartTv) factory.getComputer(SmartTv.class);
+
+        /*
+        Inconvénoient: sa compléxité de mise en place
+        avant de l'implémenter, se poser la question de sa compléxité
+         */
+
+        System.out.println("____ Prototype:");
+        /*
+        Comment créer d'objets complèxes à partir d'objets existants sans rendre le code dépendant
+        Objet A existant
+        b.setAge(a.getAge())
+         */
+
+        //pour les types simples, la question ne se pose pas
+        int x = 10;
+        int y = x; // y est une copie de x
+
+        Reponse rep1 = new Reponse("reponse1", true);
+
+        //comment faire une copie de rep1 sans faire aux getter/setter
+        /*
+        Reponse rep2 = new Reponse();
+        rep2.setTexte(rep1.getTexte());
+        rep2.setCorrect(rep1.isCorrect());
+        si les get/set deviennent private -> code inutilisable
+
+        solution: implémenter l'interface cloneable
+         */
+
+        Reponse rep2 = (Reponse) rep1.clone();
+
+        rep1.setTexte("autre réponse");
+        rep1.setCorrect(false);
+
+        System.out.println(rep2.getTexte()); //reponse1
+        System.out.println(rep2.isCorrect()); //true
+
+        System.out.println(">>> Copie d'une question:");
+
+        Question qst1 = new Question();
+        qst1.setTexte("comment cloner une question?");
+        qst1.getReponses().add(new Reponse("implémenter l'interface cloneable", true));
+        qst1.getReponses().add(new Reponse("implémenter l'interface copy", false));
+
+        Question qst2 = (Question) qst1.clone();
+
+        qst1.setTexte("new texte");
+        qst1.getReponses().get(0).setTexte("new réponse");
+
+        System.out.println(qst2.getTexte());
+        System.out.println(qst2.getReponses().get(0).getTexte());
+
+
     }
 }
