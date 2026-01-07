@@ -24,11 +24,11 @@ Un hexagone possède 2 parties:
 - Partie droite (SPI: Service Provider Interface): permet au domaine de récupérer ou d'envoyer des données
 
 ---- Une architecture hexagonale ne convient pas à tous les projets. Si le domaine métier de l'application est riche
-(complèxes, sensible) ce type d'approche peut s'appliquer at aider à mieux comprendre le domaine métie
+(complèxes, sensible) ce type d'approche peut s'appliquer at aider à mieux comprendre le domaine métier
 
 Avantages:
 - applications faciles à tester
-- le domaine métier est complétement indépendant des technos (frameworks): on al apossibilité de switcher de technoloqies
+- le domaine métier est complétement indépendant des technos (frameworks): on a la possibilité de switcher de technoloqies
 ou de faire cohabiter plusieurs technos au mm temps
 - facilité d'intéger de nouveaux dév. dans le projet
 - code facile à lire, facile à maintenir et facile à étendre
