@@ -1,5 +1,9 @@
 package fr.dawan.designspatterns;
 
+import fr.dawan.designspatterns.comportement.chainofrepsonsability.*;
+import fr.dawan.designspatterns.comportement.observer.Client;
+import fr.dawan.designspatterns.comportement.observer.Observer;
+import fr.dawan.designspatterns.comportement.observer.Produit;
 import fr.dawan.designspatterns.creation.factory.ComputerFactory;
 import fr.dawan.designspatterns.creation.factory.Laptop;
 import fr.dawan.designspatterns.creation.factory.Phone;
@@ -91,9 +95,9 @@ public class app {
                 .build();
 
         /*
-        Dépéndance Lombok:
+        Dépendance Lombok:
         1- installer le plugin lombok dans IntelliJ
-        2- Ajouter la dépendance lombk dans le pom.xml
+        2- Ajouter la dépendance lombok dans le pom.xml
         3- utiliser les annontations de lombok
         lien doc: https://projectlombok.org/features/
          */
@@ -132,7 +136,7 @@ public class app {
 
         Reponse rep1 = new Reponse("reponse1", true);
 
-        //comment faire une copie de rep1 sans faire aux getter/setter
+        //comment faire une copie de rep1 sans faire appelle aux getter/setter
         /*
         Reponse rep2 = new Reponse();
         rep2.setTexte(rep1.getTexte());
@@ -164,6 +168,42 @@ public class app {
 
         System.out.println(qst2.getTexte());
         System.out.println(qst2.getReponses().get(0).getTexte());
+
+        System.out.println(">>>>>>>>>>>>> Patterns de comportement");
+        /*
+        Très pratique dans une conception basée sur le métier (DDD: archi. hexagonale)
+        permettent:
+        - de décrire des algorithmes
+        - de décrire des comportements entre les objets
+        - de définir des formes de communications entre les objets
+         */
+
+        System.out.println("___ Chain of reponsability");
+        /*
+        Pour le mettre en place, il faut une hierarchie de classes avec un traitement que toutes les classes
+        peuvent exécuter.
+        Permet de faire circuler une demande dans une chaine d'objets, et chaque objet dans cette chaine
+        peut soit traiter la demande soit la transmettre à l'objet supérieur
+         */
+
+        Teacher teacher = new Teacher("teacher", new ResponsablePedago("respo. padego.", new Directeur("directeur", null)));
+        teacher.handleComplaint(new ComplaintRequest(125, 1, ComplaintState.OPEN,"req1"));
+        teacher.handleComplaint(new ComplaintRequest(458, 2, ComplaintState.OPEN,"req2"));
+        teacher.handleComplaint(new ComplaintRequest(785, 3, ComplaintState.OPEN,"req3"));
+
+        System.out.println("___ Observer");
+        /*
+        Permet la mise en place d'un mécanisme de souscription pour envoyer des notifications
+        à plusieurs objets au sujet d'evenements qu'ils observent
+         */
+        Produit prod = new Produit(1, "PC Dell", 1500);
+        Observer<Double> obs1 = new Client("obs1");
+        Observer<Double> obs2 = new Client("obs2");
+
+        prod.attach(obs1);
+        prod.attach(obs2);
+
+        prod.setPrice(999); //ce changement de prix déclenche l'envoie de 2 notifs
 
 
     }
