@@ -1,9 +1,8 @@
 package fr.dawan.designspatterns;
 
 import fr.dawan.designspatterns.comportement.chainofrepsonsability.*;
-import fr.dawan.designspatterns.comportement.observer.Client;
-import fr.dawan.designspatterns.comportement.observer.Observer;
-import fr.dawan.designspatterns.comportement.observer.Produit;
+import fr.dawan.designspatterns.comportement.observer.*;
+import fr.dawan.designspatterns.comportement.visitor.*;
 import fr.dawan.designspatterns.creation.factory.ComputerFactory;
 import fr.dawan.designspatterns.creation.factory.Laptop;
 import fr.dawan.designspatterns.creation.factory.Phone;
@@ -14,6 +13,9 @@ import fr.dawan.designspatterns.creation.singleton.LoggingSingleton;
 import fr.dawan.designspatterns.creation.singleton.Pdg;
 import fr.dawan.designspatterns.creation.builder.ProductLombok;
 import fr.dawan.designspatterns.creation.builder.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class app {
     static Pdg pdg3 = null, pdg4 = null;
@@ -204,6 +206,35 @@ public class app {
         prod.attach(obs2);
 
         prod.setPrice(999); //ce changement de prix déclenche l'envoie de 2 notifs
+
+        CompteBancaire cpt = new CompteBancaire("158sqdq", 1000);
+        Customer customer = new Customer("cust");
+
+        cpt.attach(customer);
+
+        cpt.retrait(1900);
+
+        System.out.println("___ Visitor");
+        /*
+        Pour le mettre en place il faut des objets qui partagent le mm traitement,
+        mais qui diffère dselon le type de l'objet
+        - Rôle du visitor est de visiter l'ensemble des objets pour leur appliquer un traitement
+        - Rôle des différents objets est d'accèpter la visite du visitor
+
+        Permet de séparer les traiatements et les objets sur lesquels ils opèrent.
+        Permet de spécialiser les classes principales (les objets) en transferant les autres traitements
+        dans une classe visitor
+
+        Les classes objets ne nécessitent aucune modifications pour leur appliquer un nouveau traitement.
+        Des objets ouverts à l'extension, mais fermés à la modification
+         */
+
+        List<Forme> formes = new ArrayList<>();
+        formes.add(new Cercle());
+        formes.add(new Rectangle());
+
+        formes.forEach(f -> f.accept(new ExportXmlVisitor()));
+        formes.forEach(f -> f.accept(new ExportJsonVisitor()));
 
 
     }
