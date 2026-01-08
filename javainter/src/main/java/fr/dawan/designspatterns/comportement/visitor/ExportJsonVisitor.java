@@ -18,6 +18,6 @@ public class ExportJsonVisitor implements Visitor{
 
     @Override
     public void Visit(Forme t) {
-        t.accept(this);
+       //
     }
 }

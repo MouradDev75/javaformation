@@ -2,6 +2,7 @@ package fr.dawan.designspatterns;
 
 import fr.dawan.designspatterns.comportement.chainofrepsonsability.*;
 import fr.dawan.designspatterns.comportement.observer.*;
+import fr.dawan.designspatterns.comportement.state.Commande;
 import fr.dawan.designspatterns.comportement.visitor.*;
 import fr.dawan.designspatterns.creation.factory.ComputerFactory;
 import fr.dawan.designspatterns.creation.factory.Laptop;
@@ -236,6 +237,24 @@ public class app {
         formes.forEach(f -> f.accept(new ExportXmlVisitor()));
         formes.forEach(f -> f.accept(new ExportJsonVisitor()));
 
+        System.out.println("___ State");
+        /*
+        A utiliser si le comportement d'un objet varie selon son état.
+        Concerne un objet qui peut avoir plusieurs états connus d'avance.
+        Ex: Document: brouillant - en correction - publier
+        Ex: Commande: validée - payée - livrée - reçue
+         */
+
+        Commande cmd = new Commande();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
 
     }
 }
