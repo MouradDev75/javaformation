@@ -1,8 +1,16 @@
 package fr.dawan.designspatterns;
 
 import fr.dawan.designspatterns.comportement.chainofrepsonsability.*;
+import fr.dawan.designspatterns.comportement.mediator2.ChatRoom;
+import fr.dawan.designspatterns.comportement.mediator2.IChatRoom;
+import fr.dawan.designspatterns.comportement.mediator2.Participant;
+import fr.dawan.designspatterns.comportement.mediator2.UserChat;
 import fr.dawan.designspatterns.comportement.observer.*;
 import fr.dawan.designspatterns.comportement.state.Commande;
+import fr.dawan.designspatterns.comportement.strategy.*;
+import fr.dawan.designspatterns.comportement.templatemethode.Facebook;
+import fr.dawan.designspatterns.comportement.templatemethode.NetworkTemplateMethod;
+import fr.dawan.designspatterns.comportement.templatemethode.Twitter;
 import fr.dawan.designspatterns.comportement.visitor.*;
 import fr.dawan.designspatterns.creation.factory.ComputerFactory;
 import fr.dawan.designspatterns.creation.factory.Laptop;
@@ -15,6 +23,9 @@ import fr.dawan.designspatterns.creation.singleton.Pdg;
 import fr.dawan.designspatterns.creation.builder.ProductLombok;
 import fr.dawan.designspatterns.creation.builder.User;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -255,6 +266,107 @@ public class app {
         cmd.printState();
         cmd.next();
         cmd.printState();
+
+        System.out.println("___ Mediator");
+        /*
+        Permet de réduire les dépendances entre les objets et de restreindre les communications directes
+        entre les objets et de les forcer à collaborer via un objet intermédiaire appelé Madiator.
+        Ex: piste d'attérissage: la tour de contrôle joue le rôle d'un médiateur entre les différents pilotes
+
+        Le Mediator doit connaitre tous les objets et es interactions possibles entre ces objets.
+        Tous les objets dépendent du Mediator
+         */
+
+        IChatRoom chatRoom = new ChatRoom();
+        Participant participant1 = new UserChat(chatRoom,"1", "Marc");
+        Participant participant2 = new UserChat(chatRoom,"2", "Marie");
+
+        chatRoom.addUser(participant1);
+        chatRoom.addUser(participant2);
+
+        participant1.send("Hello", "2");
+        participant2.send("Bonjour", "1");
+
+        System.out.println("___ Strategy");
+        /*
+        Permet de définir une famille d'algorithmes, de les mettre dans des classes séparées
+        et de rendre les objets interchangeables.
+
+        Permet d'obtenir un code respectant la bonne pratique open/close
+
+        Ex: appl. de déplacement GPS (itinéraire voiture, transports en communs, à pieds) génère un
+        itinéraire selon le mode de déplacement choisie
+        Ex: moyen de paiement pour les appli. d'achat en ligne
+         */
+
+        ShoppingCart cart = new ShoppingCart();
+        Item item1 = new Item("sdqsd", 150);
+        Item item2 = new Item("dcfrty", 99);
+
+        cart.addItem(item1);
+        cart.addItem(item2);
+
+        //paiement Cb
+        cart.pay(new CarCreditStrategy("sqdqs","qsqd", "123", "15/12/2029"));
+
+        //paiement PayPal
+        cart.pay(new PaypalStrategy("email", "password"));
+
+        //paement par chèque
+        cart.pay(new CheckStrategy("sdqsdqs1256"));
+
+        System.out.println("___ Template Method");
+        /*
+        A mettre en place lorsque:
+        des classes contient beaucoup de code similaire. Il s'agit du mm algorithme (les mm étapes), y'à que l'implémentation
+        des étapes qui change d'une classe à une autre.
+
+        template Method propose de mettre en place le squelette d'un algorithme dans une classe mère et de laisser les classes filles
+        redéfinir certaines étapes de l'algorithme sans changer la structure du squelette définit dans la classe mère
+
+        Template Method propose de découper un algorithme en plusieurs étapes, de transfomer étape en méthode, ensuite de regourper les appels de
+        ces méthodes dans une seule méthode socle appelée Template Method.
+
+        ex: réseaux sociaux: pour envoyer un message -> Etapes: login - send message - logout
+        Beaucoup  de traitements similaires concernant les réseaux sociaux
+
+         */
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        NetworkTemplateMethod network = null;
+
+        System.out.println("User name: ");
+        String userName = reader.readLine();
+
+        System.out.println("Password: ");
+        String pwd = reader.readLine();
+
+        System.out.println("Message: ");
+        String msg = reader.readLine();
+
+        System.out.println("""
+                Choose social Network for posting message:
+                1- Facebook
+                2- Twitter
+                """);
+        int choice = Integer.parseInt(reader.readLine());
+        if(choice == 1)
+            network = new Facebook(userName, pwd);
+        else
+            network = new Twitter(userName, pwd);
+
+        //Appelle de Template Method
+        network.post(msg);
+
+        reader.close();
+
+        /*
+        Sans le pattern Template Method
+        network.login()
+        network.sendMessage()
+        network.logout()
+
+         */
 
     }
 }

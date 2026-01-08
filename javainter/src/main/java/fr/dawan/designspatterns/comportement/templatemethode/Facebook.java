@@ -1,0 +1,52 @@
+package fr.dawan.designspatterns.comportement.templatemethode;
+
+public class Facebook extends NetworkTemplateMethod{
+
+
+    public Facebook(String userName, String password) {
+        super(userName, password);
+    }
+
+    @Override
+    boolean login(String userName, String password) {
+        System.out.println("Check user parameters");
+        System.out.println("Name: "+this.userName);
+        System.out.print("password: ");
+        for (int i = 0; i < password.length(); i++) {
+            System.out.print("*");
+        }
+        simulateLatency();
+        System.out.println("Login success on Facebook.....");
+        return true;
+    }
+
+    private void simulateLatency() {
+        try{
+            int i = 0;
+            System.out.println();
+            while(i<10){
+                System.out.print(".");
+                Thread.sleep(500); //en millisecondes
+                i++;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    boolean sendMessage(byte[] msg) {
+        boolean messageSend =true;
+        if(messageSend == true){
+            System.out.println("Message: "+new String(msg)+" was posted on facebook");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    void logout() {
+        System.out.println("User: "+userName+" was logged out from Facebook");
+    }
+}
