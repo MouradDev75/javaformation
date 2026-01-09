@@ -22,6 +22,9 @@ import fr.dawan.designspatterns.creation.singleton.LoggingSingleton;
 import fr.dawan.designspatterns.creation.singleton.Pdg;
 import fr.dawan.designspatterns.creation.builder.ProductLombok;
 import fr.dawan.designspatterns.creation.builder.User;
+import fr.dawan.designspatterns.structure.bridge.*;
+import fr.dawan.designspatterns.structure.proxy.Internet;
+import fr.dawan.designspatterns.structure.proxy.ProxyInternet;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -365,6 +368,35 @@ public class app {
         network.login()
         network.sendMessage()
         network.logout()
+
+         */
+        System.out.println(">>>>>>>>>>>>>>>> patterns de structure:");
+        /*
+        Appelés aussi patterns de composition
+        Pratiquent lors d'une conception basée sur l'interaction
+         */
+
+        System.out.println("___Proxy:");
+        /*
+        Permet de fournir un substitut d'un objet. Il donne le contrôle sur l'objet original vous
+        permettant d'effectuer des traitements dessus avant ou apèrs que la demande ne lui parvienne.
+        Dans un code, un proxy est une copie de l'objet original, les 2 objets partagent la mm structure
+         */
+        Internet internet = new ProxyInternet();
+        internet.connectTo("dawan.fr");
+        internet.connectTo("123.com");
+
+        System.out.println("___Bridge:");
+        /*
+        permet de définir un pont entre l'appli. principale est les différents sys. externes
+         */
+        Bridge bridge = new ProduitBridge();
+        List<ProduitEntity> entities1 = bridge.getProduitEntities(new SystemExtern1());
+        List<ProduitEntity> entities2 = bridge.getProduitEntities(new SystemExtern2());
+
+        System.out.println("___Composite:");
+        /*
+        Dans l'application principale:
 
          */
 
