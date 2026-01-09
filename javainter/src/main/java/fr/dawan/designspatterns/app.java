@@ -23,11 +23,19 @@ import fr.dawan.designspatterns.creation.singleton.Pdg;
 import fr.dawan.designspatterns.creation.builder.ProductLombok;
 import fr.dawan.designspatterns.creation.builder.User;
 import fr.dawan.designspatterns.structure.bridge.*;
+import fr.dawan.designspatterns.structure.composite.CompositeDepartement;
+import fr.dawan.designspatterns.structure.composite.Departement;
+import fr.dawan.designspatterns.structure.composite.DepartementFinance;
+import fr.dawan.designspatterns.structure.composite.DepartementVente;
+import fr.dawan.designspatterns.structure.facade.FacadeHelper;
+import fr.dawan.designspatterns.structure.facade.MySqlHelper;
+import fr.dawan.designspatterns.structure.facade.OracleHelper;
 import fr.dawan.designspatterns.structure.proxy.Internet;
 import fr.dawan.designspatterns.structure.proxy.ProxyInternet;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -315,7 +323,7 @@ public class app {
         //paiement PayPal
         cart.pay(new PaypalStrategy("email", "password"));
 
-        //paement par chèque
+        //paiement par chèque
         cart.pay(new CheckStrategy("sdqsdqs1256"));
 
         System.out.println("___ Template Method");
@@ -396,9 +404,56 @@ public class app {
 
         System.out.println("___Composite:");
         /*
-        Dans l'application principale:
+        Le pattern composite permet 2 choses:
+        soit manipuler les objets individuellement
+        soit manipuler une composition d'objet
+
+        Prérecquis: les objets fournis par le système externe partagent la mm structure
 
          */
+        //Option1: manipuler les objets individuellement
+        Departement departementVente = new DepartementVente();
+        Departement departementFinance = new DepartementFinance();
+        departementFinance.departementName();
+        departementVente.departementName();
+
+        //Option2: manipuler une composition d'objets
+        CompositeDepartement composite = new CompositeDepartement();
+        composite.addDepartement(departementFinance);
+        composite.addDepartement(departementVente);
+
+        composite.departementName();
+
+        System.out.println("___Facade:");
+        /*
+        Le plus répondu dans la pratique
+        Propose un accès simplifié à un ensemble de classes complèxes.
+
+        Ex: application qui appelle une BD distance (Oracle, MySql) et génère des rapports PDF et HTML
+         */
+
+        System.out.println(">> Sans Facade:");
+        String tableName = "Employes";
+
+        Connection cnx = OracleHelper.getOraclelConnection();
+        OracleHelper oracleHelper = new OracleHelper();
+        oracleHelper.generateOracleHtmlReport(tableName, cnx);
+        oracleHelper.generateOraclePdfReport(tableName, cnx);
+
+        Connection cnx2 = MySqlHelper.getMySqlConnection();
+        MySqlHelper mySqlHelper = new MySqlHelper();
+        mySqlHelper.generateMySqlHtmlReport(tableName, cnx2);
+        mySqlHelper.generateMySqlPdfReport(tableName, cnx2);
+
+        /*
+        Facade propose en sortie des méthodes répondant aux besoins de l'application principale
+         */
+        System.out.println(">> Avec Facade:");
+        FacadeHelper.generateReport(FacadeHelper.DbType.MYSQL, FacadeHelper.ReportType.HTML, tableName);
+        FacadeHelper.generateReport(FacadeHelper.DbType.MYSQL, FacadeHelper.ReportType.PDF, tableName);
+        FacadeHelper.generateReport(FacadeHelper.DbType.ORACLE, FacadeHelper.ReportType.HTML, tableName);
+        FacadeHelper.generateReport(FacadeHelper.DbType.ORACLE, FacadeHelper.ReportType.PDF, tableName);
+
 
     }
 }
